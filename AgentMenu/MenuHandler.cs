@@ -11,10 +11,12 @@ namespace AgentMenu {
 
     private static Menu currentMenu;
     public static Bitmap Display = new Bitmap(Bitmap.MaxWidth, Bitmap.MaxHeight);
+    public static int DisplayXoffset = 0;
+    public static int DisplayYoffset = 0;
     public static Font font;
 
     public static int rowHeight=18;
-    public static int xOffset=7;
+    public static int xOffset = 7;
     public static int yOffset = 2;
 
     public static bool Focus = false;
@@ -54,20 +56,21 @@ namespace AgentMenu {
     /// </summary>
     public static void Refresh() {
       currentMenu.Render(Display, font);
+      Display.Flush(DisplayXoffset, DisplayYoffset, Display.Width - DisplayXoffset, Display.Height - DisplayYoffset);
     }
 
     static void btnDown(uint data1, uint data2, DateTime time) {
       if (!Focus) { DoEvent(Button.VK_DOWN); return; }
       currentMenu.selectedIndex++;
       if (currentMenu.Items.Length <= currentMenu.selectedIndex) currentMenu.selectedIndex = currentMenu.Items.Length - 1;
-      if (currentMenu.selectedIndex >= 0) currentMenu.Render(Display, font);
+      if (currentMenu.selectedIndex >= 0) Refresh();
     }
 
     static void btnUp(uint data1, uint data2, DateTime time) {
       if (!Focus) { DoEvent(Button.VK_UP); return; }
       currentMenu.selectedIndex--;
       if (currentMenu.selectedIndex<0) currentMenu.selectedIndex = 0;
-      if (currentMenu.selectedIndex >= 0) currentMenu.Render(Display, font);
+      if (currentMenu.selectedIndex >= 0) Refresh();
     }
 
     static void btnBack(uint data1, uint data2, DateTime time) {

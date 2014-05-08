@@ -41,6 +41,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SmallMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Agent.Core" />

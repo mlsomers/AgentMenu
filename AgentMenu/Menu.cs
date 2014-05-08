@@ -71,14 +71,22 @@ namespace AgentMenu {
     /// <param name="display">The display bitmap</param>
     /// <param name="font">A font</param>
     public virtual void Render(Bitmap display, Font font) {
-      display.Clear();
-      int maxH = Bitmap.MaxHeight;
+      int maxW = Bitmap.MaxWidth - MenuHandler.DisplayXoffset;
+      int maxH = Bitmap.MaxHeight - MenuHandler.DisplayYoffset;
+
+      // Clear the screen
+      if (MenuHandler.DisplayYoffset == 0 && MenuHandler.DisplayXoffset == 0) {
+        display.Clear();
+      } else {
+        display.DrawRectangle(Color.Black, 0, MenuHandler.DisplayXoffset, MenuHandler.DisplayYoffset, maxW, maxH, 0, 0, Color.Black, MenuHandler.DisplayXoffset, MenuHandler.DisplayYoffset, Color.Black, maxW, maxH, 255);
+      }
+
       int top = 0;
       bool drawTitle = (!ReferenceEquals(Title, null) && (Title != string.Empty));
 
       if (drawTitle) {
         maxH -= MenuHandler.rowHeight;
-        top = MenuHandler.rowHeight;
+        top += MenuHandler.rowHeight;
       }
 
       int ymid = top + (maxH / 2) - (MenuHandler.rowHeight / 2);
@@ -110,7 +118,6 @@ namespace AgentMenu {
       DrawCaret(display, ymid);
 
       if(drawTitle) DrawTitle(Title, display, font);
-      display.Flush();
     }
 
     /// <summary>
@@ -118,16 +125,19 @@ namespace AgentMenu {
     /// Note that this will be drawn AFTER the menu-item has been drawn.
     /// </summary>
     public virtual void DrawCaret(Bitmap display, int yOffset) {
-      display.DrawRectangle(Color.White, 0, 0, yOffset, Bitmap.MaxWidth, MenuHandler.rowHeight, 3, 3, Color.White, 0, 0, Color.White, Bitmap.MaxWidth, MenuHandler.rowHeight, 0);
+      int maxWidth = Bitmap.MaxWidth - MenuHandler.DisplayXoffset;
+      display.DrawRectangle(Color.White, 1, MenuHandler.DisplayXoffset, MenuHandler.DisplayYoffset + yOffset, maxWidth, MenuHandler.rowHeight, 3, 3, Color.White, 0, 0, Color.White, maxWidth, MenuHandler.rowHeight, 0);
     }
 
     /// <summary>
     /// Draws the titlebar at the top of the screen
     /// </summary>
     /// <remarks>Made it static so it can be called for different screens as well, but maybe virtual would be better in some cases</remarks>
-    public static void DrawTitle(string title, Bitmap display, Font font) {
-      display.DrawRectangle(Color.White, 1, 0, 0, Bitmap.MaxWidth, MenuHandler.rowHeight, 0, 0, Color.White, 0, 0, Color.White, Bitmap.MaxWidth, MenuHandler.rowHeight, 255);
-      display.DrawText(title, font, Color.Black, MenuHandler.xOffset, MenuHandler.yOffset);
+    public virtual void DrawTitle(string title, Bitmap display, Font font) {
+      int maxWidth = Bitmap.MaxWidth - MenuHandler.DisplayXoffset;
+      display.DrawRectangle(Color.White, 1, MenuHandler.DisplayXoffset, MenuHandler.DisplayYoffset, maxWidth, MenuHandler.rowHeight, 0, 0,
+        Color.White, MenuHandler.DisplayXoffset, MenuHandler.DisplayYoffset, Color.White, maxWidth, MenuHandler.rowHeight, 255);
+      display.DrawText(title, font, Color.Black, MenuHandler.xOffset + MenuHandler.DisplayXoffset, MenuHandler.yOffset + MenuHandler.DisplayYoffset);
     }
 
     /// <summary>

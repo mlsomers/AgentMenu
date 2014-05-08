@@ -8,12 +8,13 @@ using System.Threading;
 
 namespace AgentMenuDemo {
   public class Program {
-    static Font fontNinaB;
+    public static Font fontNinaB;
+    public static Menu menu;
 
     public static void Main() {
       fontNinaB = Resources.GetFont(Resources.FontResources.NinaB);
 
-      Menu menu = new Menu() {
+      menu = new Menu() {
         Title = "Menu Demo",
         Items = new MenuItem[]{
           new MenuItem("Item 1"),
@@ -29,6 +30,7 @@ namespace AgentMenuDemo {
           new MenuItem("Item 5"),
           new CheckedMenuItem(){Text="Item 6"},
           new MenuItem("Item 7 (custom)", new MenuItem.OnSelected(doCustomStuff)),
+          new MenuItem("Item 8 (mini)", new MenuItem.OnSelected(SmallMenu.Toggle)),
         }
       };
 

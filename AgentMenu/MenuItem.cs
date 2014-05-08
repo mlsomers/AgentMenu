@@ -27,7 +27,7 @@ namespace AgentMenu {
     /// When overriding, be sure to keep yPos and MenuHandler.rowHeight in mind (prevent drawing over other stuff)
     /// </summary>
     public virtual void Render(Bitmap display, Font font, int yPos) {
-      display.DrawText(Text, font, Color.White, MenuHandler.xOffset, yPos + MenuHandler.yOffset);
+      display.DrawText(Text, font, Color.White, MenuHandler.xOffset + MenuHandler.DisplayXoffset, yPos + MenuHandler.yOffset + MenuHandler.DisplayYoffset);
     }
 
     /// <summary>
