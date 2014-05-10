@@ -28,9 +28,9 @@ namespace AgentMenuDemo {
           new MenuItem("Item 3"),
           new MenuItem("Item 4 (log)", new MenuItem.OnSelected(doItem4)),
           new MenuItem("Item 5"),
-          new CheckedMenuItem(){Text="Item 6"},
+          new CheckedMenuItem("Item 6"),
           new MenuItem("Item 7 (custom)", new MenuItem.OnSelected(doCustomStuff)),
-          new MenuItem("Item 8 (mini)", new MenuItem.OnSelected(SmallMenu.Toggle)),
+          new CheckedMenuItem("Item 8 (mini)", new MenuItem.OnSelected(SmallMenu.Toggle)),
         }
       };
 
@@ -69,6 +69,7 @@ namespace AgentMenuDemo {
         case Button.VK_DOWN: Debug.Print("Down"); break;
         case Button.VK_MENU: Debug.Print("Menu (exit)");
           MenuHandler.Focus = true;
+          if (SmallMenu.InSmallMenu) SmallMenu.DrawBorders();
           MenuHandler.Refresh();
           MenuHandler.ButtonPress -= MenuHandler_ButtonPress; // *1  Unsubscribe again, allowing multiple custom handlers
           break;

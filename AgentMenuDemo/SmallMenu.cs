@@ -6,12 +6,12 @@ using Microsoft.SPOT.Presentation.Media;
 namespace AgentMenuDemo {
   public class SmallMenu {
     const int TopSpace = 18;
-    private static bool InSmallMenu = false;
+    internal static bool InSmallMenu = false;
     private static ExtendedTimer TimeTimer = new ExtendedTimer(timerCallback, null, ExtendedTimer.TimeEvents.Second);
     private static Font smaller = Resources.GetFont(Resources.FontResources.small);
 
     private static void timerCallback(object state) {
-      if (!InSmallMenu) return;
+      if (!InSmallMenu || !MenuHandler.Focus) return;
       DrawTime();
       MenuHandler.Display.Flush(0, 0, Bitmap.MaxWidth, TopSpace);
     }
@@ -30,7 +30,7 @@ namespace AgentMenuDemo {
         MenuHandler.yOffset = 0;
         MenuHandler.xOffset = 3;
         MenuHandler.font = smaller;
-        DrawBorders(0, TopSpace, 20, Bitmap.MaxHeight - TopSpace);
+        DrawBorders();
       } else {
         MenuHandler.DisplayXoffset = 0;
         MenuHandler.DisplayYoffset = 0;
@@ -43,9 +43,10 @@ namespace AgentMenuDemo {
       return true;
     }
 
-    private static void DrawBorders(int x, int y, int w, int h) {
+    internal static void DrawBorders() {
       MenuHandler.Display.Clear();
-      MenuHandler.Display.DrawRectangle(Color.White, 0, x, y, w, h, 0, 0, Color.White, x, y, Color.Black, x + w, y + h, 255);
+      int h = Bitmap.MaxHeight - TopSpace;
+      MenuHandler.Display.DrawRectangle(Color.White, 0, 0, TopSpace, 20, h, 0, 0, Color.White, 0, TopSpace, Color.Black, 20, TopSpace + h, 255);
       DrawTime();
       MenuHandler.Display.Flush();
     }
